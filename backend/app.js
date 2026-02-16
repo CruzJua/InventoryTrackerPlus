@@ -28,7 +28,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.get('/', (req, res) => {
-    res.redirect('/docs');
+    res.redirect('./docs');
 });
 
 /**
