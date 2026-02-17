@@ -6,7 +6,7 @@ const backendApp = require('./backend/app');
 
 
 app.use('/api', backendApp);
-app.use('/', frontendApp);
+app.use('', frontendApp);
 
 const PORT = process.env.PORT || 3050;
 app.listen(PORT, () => {

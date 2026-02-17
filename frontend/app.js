@@ -17,6 +17,9 @@ app.get("/", (req, resp) =>{
 app.get("/contact-us", (req, resp) =>{
     resp.render('contact-us')
 });
+app.get("/inventory", (req, resp) =>{
+    resp.render('view-stock')
+});
 
 
 module.exports = app;
