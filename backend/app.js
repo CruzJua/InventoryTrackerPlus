@@ -23,12 +23,13 @@ const options = {
 };
 
 const specs = swaggerJsdoc(options);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.get('/', (req, res) => {
-    res.redirect('./docs');
+
+app.get('/api', (req, res) => {
+    res.redirect('/');
 });
 
 /**

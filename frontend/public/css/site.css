@@ -1,0 +1,15 @@
+:root {
+    --main-bg: #9d4444;
+    --main-color: #8018ac;
+    --main-accent: #999999;
+}
+
+* {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+}
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
