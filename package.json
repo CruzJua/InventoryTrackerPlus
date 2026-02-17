@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node root.js",
     "install-all": "npm install && npm install --workspaces",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon root.js"
   },
   "workspaces": [
     "frontend",
