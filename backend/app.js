@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = 2050;
+const path = require('path');
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -10,10 +10,16 @@ const options = {
         info: {
             title: 'Inventory Tracker Plus API',
             version: '1.0.0',
-            summary: 'API layer for Inventory Tracker Plus',
+            summary: 'API layer for Inventory Tracker Plus'
         },
     },
-    apis: ['./app.js'],
+    servers: [
+        {
+            url: '/api',
+            description: 'API layer for Inventory Tracker Plus'
+        }
+    ],
+    apis: [path.join(__dirname, 'app.js')],
 };
 
 const specs = swaggerJsdoc(options);
@@ -22,7 +28,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.get('/', (req, res) => {
-    res.redirect('/docs');
+    res.redirect('./docs');
 });
 
 /**
@@ -102,13 +108,13 @@ app.get('/categories', (req, res) => {
 /** 
  * @openapi
  * /deleteUsage/:id:
- *   get:
+ *   delete:
  *     summary: Delete a usage doc by ID
  *     responses:
  *       200:
  *         description: A single usage doc
 */
-app.get('/deleteUsage/:id', (req, res) => {
+app.delete('/deleteUsage/:id', (req, res) => {
     // TODO: delete the usage doc by its ID
     res.json(data)
 });
@@ -116,13 +122,13 @@ app.get('/deleteUsage/:id', (req, res) => {
 /** 
  * @openapi
  * /deleteStock/:id:
- *   get:
+ *   delete:
  *     summary: Delete a stock doc by ID
  *     responses:
  *       200:
  *         description: A single stock doc
 */
-app.get('/deleteStock/:id', (req, res) => {
+app.delete('/deleteStock/:id', (req, res) => {
     // TODO: delete the stock doc by its ID
     res.json(data)
 });
@@ -130,13 +136,13 @@ app.get('/deleteStock/:id', (req, res) => {
 /** 
  * @openapi
  * /deleteCategory/:id:
- *   get:
+ *   delete:
  *     summary: Delete a category doc by ID
  *     responses:
  *       200:
  *         description: A single category doc
 */
-app.get('/deleteCategory/:id', (req, res) => {
+app.delete('/deleteCategory/:id', (req, res) => {
     // TODO: delete the category doc by its ID
     res.json(data)
 });
@@ -225,8 +231,4 @@ app.post('/updateCategory/:id', (req, res) => {
     res.json(data)
 });
 
-
-app.listen(PORT, () => {
-    console.log('Server started on port', PORT);
-    console.log('http://localhost:' + PORT);
-});
+module.exports = app;
