@@ -11,7 +11,14 @@
             <section>
                 <p>This is the page to view the current stock</p>
                 <p>It should be a very dynamic page with a list of current items in the businesses inventory</p>
-                <p>TODO: Connect to API/DAL</p>
+                <% for (stock of inventoryList) { %>
+                <div class="stock-item">
+                    <img src="<place-holder>" alt="Image of <%= stock.stock_name %>">
+                    <h3><%= stock.stock_name %></h3>
+                    <p>Current Quantity: <%= stock.quantity %></p>
+                    <p class="restock-amount">Restock when Current Quantity is less or equal to: <%= stock.min_to_restock %></p>
+                </div>
+                <%}%>
             </section>
         </section>
         <%-include("partials/footer.ejs")%>
