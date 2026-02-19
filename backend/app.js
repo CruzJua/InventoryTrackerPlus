@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const path = require('path');
 
+const {dal} = require('./mongoDAL');
+
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const options = {
@@ -23,13 +25,13 @@ const options = {
 };
 
 const specs = swaggerJsdoc(options);
-app.use('/', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.get('/api', (req, res) => {
-    res.redirect('/');
+    res.redirect('/docs');
 });
 
 /**
@@ -52,6 +54,7 @@ app.get('/api', (req, res) => {
  *         description: A list of stock docs
  */
 app.get('/stock', async (req, res) => {
+    console.log("(API) GETTING ALL STOCK");
     const filter = {};
     if (req.query.name) {
         filter.name = req.query.name;
@@ -59,8 +62,18 @@ app.get('/stock', async (req, res) => {
     if (req.query.category) {
         filter.category = req.query.category;
     }
-    // TODO: implement the connection to the DAL
-    res.json(filter);
+    // TODO: implement the filter in the DAL, validate filter in API before passing to DAL
+    try{
+        const dalResponse = await dal.getAllStock();
+        let response = {
+        code: 200,
+        body: dalResponse
+        };
+        res.json(response);
+    }catch(e){
+        console.error(e);
+    }
+
 });
 
 /** 
