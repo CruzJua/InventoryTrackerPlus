@@ -1,7 +1,10 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
 const {MongoClient, ObjectId} = require('mongodb');
 
-// FOR DEV----Be sure you take out the placeholder credentials and replace with real username and password for Mongo
-const uri = "mongodb+srv://dev:Password123@cluster0.v1cucnn.mongodb.net/";
+const uri = process.env.CONNECTION_STRING;
+
 let dal = {
     getAllStock: async function (filter = null) {
         console.log("(DAL) GETTING ALL STOCK");
