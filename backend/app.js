@@ -91,9 +91,19 @@ app.get('/stock', async (req, res) => {
  *       200:
  *         description: A single stock doc
 */
-app.get('/stock/:id', (req, res) => {
+app.get('/stock/:id', async (req, res) => {
     // TODO: get a single stock doc by id
-    res.json(data)
+    const _id = req.params.id;
+    try{
+        const dalResponse = await dal.getSingleStock(_id);
+        let response = {
+        code: 200,
+        body: dalResponse
+        };
+        res.json(response);
+    }catch(e){
+        console.error(e);
+    }
 });
 
 /** 
@@ -211,16 +221,30 @@ app.post('/createCategory', (req, res) => {
 
 /** 
  * @openapi
- * /updateStock/:id:
+ * /updateQuantity/:id:
  *   post:
- *     summary: Update a stock doc by ID
+ *     summary: Update quantity of doc by ID
  *     responses:
  *       200:
  *         description: A single stock doc
 */
-app.post('/updateStock/:id', (req, res) => {
+app.post('/updateQuantity/:id', async (req, res) => {
     // TODO: update the stock doc by its ID
-    res.json(data)
+    log("(API) ID TO UPDATE: " + req.params.id);
+    let updatedStock = {
+        _id: req.params.id,
+        quantity: req.body.quantity
+    };
+    try{
+        const dalResponse = await dal.updateQuantity(updatedStock);
+        let response = {
+        code: 200,
+        body: dalResponse
+        };
+        res.json(response);
+    }catch(e){
+        console.error(e);
+    }
 });
 
 /** 
