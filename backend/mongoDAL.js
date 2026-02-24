@@ -1,5 +1,8 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
+const debugLogger = require('../logger');
+
+const log = debugLogger("DAL");
 
 const {MongoClient, ObjectId} = require('mongodb');
 
@@ -7,7 +10,7 @@ const uri = process.env.CONNECTION_STRING;
 
 let dal = {
     getAllStock: async function (filter = null) {
-        console.log("(DAL) GETTING ALL STOCK");
+        log("GETTING ALL STOCK");
         const client = new MongoClient(uri);
         try{
             await client.connect()
@@ -20,7 +23,7 @@ let dal = {
                 //With this structure, we must validate the filter in the API and make sure it is a valid query up there
                 results = await coll.find(filter).toArray();
             }
-            console.log(results)
+            log(results)
             return results;
         }finally{
             await client.close();
