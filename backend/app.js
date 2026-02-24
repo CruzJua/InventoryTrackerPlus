@@ -3,6 +3,8 @@ const app = express();
 const path = require('path');
 
 const {dal} = require('./mongoDAL');
+const debugLogger = require('../logger');
+
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -25,6 +27,9 @@ const options = {
 };
 
 const specs = swaggerJsdoc(options);
+
+const log = debugLogger("Backend");
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(express.json());
@@ -54,7 +59,7 @@ app.get('/api', (req, res) => {
  *         description: A list of stock docs
  */
 app.get('/stock', async (req, res) => {
-    console.log("(API) GETTING ALL STOCK");
+    log("(API) GETTING ALL STOCK");
     const filter = {};
     if (req.query.name) {
         filter.name = req.query.name;
