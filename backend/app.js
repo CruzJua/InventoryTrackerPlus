@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require('path');
 
+const { upload } = require('./utils/cloudinary');
 const {dal} = require('./mongoDAL');
 const debugLogger = require('../logger');
 
@@ -248,6 +249,54 @@ app.post('/updateUsage/:id', (req, res) => {
 app.post('/updateCategory/:id', (req, res) => {
     // TODO: update the category doc by its ID
     res.json(data)
+});
+/**
+ * @openapi
+ * /api/upload:
+ *   post:
+ *     summary: Upload an image to a company subfolder
+ *     description: Uploads an image to Cloudinary. Use 'companyName' to organize into subfolders.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               companyName:
+ *                 type: string
+ *                 description: The name of the company (used for subfolder naming)
+ *                 example: "AcmeCorp"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The image file to upload
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 imageUrl:
+ *                   type: string
+ *                 publicId:
+ *                   type: string
+ */
+app.post('/upload', upload.single('image'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        res.json({
+            message: "Upload successful!",
+            imageUrl: req.file.path,
+            publicId: req.file.filename
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 module.exports = app;
