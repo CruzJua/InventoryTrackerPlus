@@ -1,3 +1,4 @@
+<!--Build this page out to be a submenu of the view-stock page.-->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,18 +8,22 @@
     <body>
         <%- include("partials/header.ejs") %>
         <section>
-            <h2>View Current Stock</h2>
+            <h2><%=stock.stock_name%> Stock</h2>
             <section>
-                <p>This is the page to view the current stock</p>
-                <p>It should be a very dynamic page with a list of current items in the businesses inventory</p>
-                <% for (stock of inventoryList) { %>
                 <div class="stock-item">
                     <img src="<place-holder>" alt="Image of <%= stock.stock_name %>">
-                    <h3><a href= "/modify-stock/<%=stock._id%>"><%= stock.stock_name %></a></h3>
                     <p>Current Quantity: <%= stock.quantity %></p>
+                    <form action="/update-stock-quantity/<%=stock._id%>" method="POST">
+                        <label for="quantity">New Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" min="0" required>
+                        <button type="submit">Update Stock</button>
+                    </form>
+                    <details>
+                        <summary>Description</summary>
+                        <p><%= stock.description %></p>
+                    </details>
                     <p class="restock-amount">Restock when Current Quantity is less or equal to: <%= stock.min_to_restock %></p>
                 </div>
-                <%}%>
             </section>
         </section>
         <%-include("partials/footer.ejs")%>
