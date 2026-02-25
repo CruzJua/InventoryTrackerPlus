@@ -1,42 +1,42 @@
 const express = require("express");
 const app = express();
-const path = require('path');
+const path = require("path");
 
-const {dal} = require('./mongoDAL');
-const debugLogger = require('../logger');
+const { upload } = require("./utils/cloudinary");
+const { dal } = require("./mongoDAL");
+const debugLogger = require("../logger");
 
-
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const options = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Inventory Tracker Plus API',
-            version: '1.0.0',
-            summary: 'API layer for Inventory Tracker Plus'
-        },
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Inventory Tracker Plus API",
+      version: "1.0.0",
+      summary: "API layer for Inventory Tracker Plus",
     },
-    servers: [
-        {
-            url: '/api',
-            description: 'API layer for Inventory Tracker Plus'
-        }
-    ],
-    apis: [path.join(__dirname, 'app.js')],
+  },
+  servers: [
+    {
+      url: "/api",
+      description: "API layer for Inventory Tracker Plus",
+    },
+  ],
+  apis: [path.join(__dirname, "app.js")],
 };
 
 const specs = swaggerJsdoc(options);
 
 const log = debugLogger("Backend");
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/api', (req, res) => {
-    res.redirect('/docs');
+app.get("/api", (req, res) => {
+  res.redirect("/docs");
 });
 
 /**
@@ -58,30 +58,29 @@ app.get('/api', (req, res) => {
  *       200:
  *         description: A list of stock docs
  */
-app.get('/stock', async (req, res) => {
-    log("(API) GETTING ALL STOCK");
-    const filter = {};
-    if (req.query.name) {
-        filter.name = req.query.name;
-    }
-    if (req.query.category) {
-        filter.category = req.query.category;
-    }
-    // TODO: implement the filter in the DAL, validate filter in API before passing to DAL
-    try{
-        const dalResponse = await dal.getAllStock();
-        let response = {
-        code: 200,
-        body: dalResponse
-        };
-        res.json(response);
-    }catch(e){
-        console.error(e);
-    }
-
+app.get("/stock", async (req, res) => {
+  log("(API) GETTING ALL STOCK");
+  const filter = {};
+  if (req.query.name) {
+    filter.name = req.query.name;
+  }
+  if (req.query.category) {
+    filter.category = req.query.category;
+  }
+  // TODO: implement the filter in the DAL, validate filter in API before passing to DAL
+  try {
+    const dalResponse = await dal.getAllStock();
+    let response = {
+      code: 200,
+      body: dalResponse,
+    };
+    res.json(response);
+  } catch (e) {
+    console.error(e);
+  }
 });
 
-/** 
+/**
  * @openapi
  * /stock/:id:
  *   get:
@@ -89,23 +88,23 @@ app.get('/stock', async (req, res) => {
  *     responses:
  *       200:
  *         description: A single stock doc
-*/
-app.get('/stock/:id', async (req, res) => {
-    // TODO: get a single stock doc by id
-    const _id = req.params.id;
-    try{
-        const dalResponse = await dal.getSingleStock(_id);
-        let response = {
-        code: 200,
-        body: dalResponse
-        };
-        res.json(response);
-    }catch(e){
-        console.error(e);
-    }
+ */
+app.get("/stock/:id", async (req, res) => {
+  // TODO: get a single stock doc by id
+  const _id = req.params.id;
+  try {
+    const dalResponse = await dal.getSingleStock(_id);
+    let response = {
+      code: 200,
+      body: dalResponse,
+    };
+    res.json(response);
+  } catch (e) {
+    console.error(e);
+  }
 });
 
-/** 
+/**
  * @openapi
  * /usage/:id:
  *   get:
@@ -113,13 +112,13 @@ app.get('/stock/:id', async (req, res) => {
  *     responses:
  *       200:
  *         description: A single usage doc
-*/
-app.get('/usage/:id', (req, res) => {
-    // TODO: get the usage doc by its ID
-    res.json(data)
+ */
+app.get("/usage/:id", (req, res) => {
+  // TODO: get the usage doc by its ID
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /categories:
  *   get:
@@ -127,14 +126,14 @@ app.get('/usage/:id', (req, res) => {
  *     responses:
  *       200:
  *         description: A list of categories
-*/
-app.get('/categories', (req, res) => {
-    // TODO: get all categories
+ */
+app.get("/categories", (req, res) => {
+  // TODO: get all categories
 
-    res.json(data)
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /deleteUsage/:id:
  *   delete:
@@ -142,13 +141,13 @@ app.get('/categories', (req, res) => {
  *     responses:
  *       200:
  *         description: A single usage doc
-*/
-app.delete('/deleteUsage/:id', (req, res) => {
-    // TODO: delete the usage doc by its ID
-    res.json(data)
+ */
+app.delete("/deleteUsage/:id", (req, res) => {
+  // TODO: delete the usage doc by its ID
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /deleteStock/:id:
  *   delete:
@@ -156,13 +155,13 @@ app.delete('/deleteUsage/:id', (req, res) => {
  *     responses:
  *       200:
  *         description: A single stock doc
-*/
-app.delete('/deleteStock/:id', (req, res) => {
-    // TODO: delete the stock doc by its ID
-    res.json(data)
+ */
+app.delete("/deleteStock/:id", (req, res) => {
+  // TODO: delete the stock doc by its ID
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /deleteCategory/:id:
  *   delete:
@@ -170,13 +169,13 @@ app.delete('/deleteStock/:id', (req, res) => {
  *     responses:
  *       200:
  *         description: A single category doc
-*/
-app.delete('/deleteCategory/:id', (req, res) => {
-    // TODO: delete the category doc by its ID
-    res.json(data)
+ */
+app.delete("/deleteCategory/:id", (req, res) => {
+  // TODO: delete the category doc by its ID
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /createStock:
  *   post:
@@ -184,13 +183,13 @@ app.delete('/deleteCategory/:id', (req, res) => {
  *     responses:
  *       200:
  *         description: A single stock doc
-*/
-app.post('/createStock', (req, res) => {
-    // TODO: create a new stock doc
-    res.json(data)
+ */
+app.post("/createStock", (req, res) => {
+  // TODO: create a new stock doc
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /createUsage:
  *   post:
@@ -198,13 +197,13 @@ app.post('/createStock', (req, res) => {
  *     responses:
  *       200:
  *         description: A single usage doc
-*/
-app.post('/createUsage', (req, res) => {
-    // TODO: create a new usage doc
-    res.json(data)
+ */
+app.post("/createUsage", (req, res) => {
+  // TODO: create a new usage doc
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /createCategory:
  *   post:
@@ -212,13 +211,13 @@ app.post('/createUsage', (req, res) => {
  *     responses:
  *       200:
  *         description: A single category doc
-*/
-app.post('/createCategory', (req, res) => {
-    // TODO: create a new category doc
-    res.json(data)
+ */
+app.post("/createCategory", (req, res) => {
+  // TODO: create a new category doc
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /updateQuantity/:id:
  *   post:
@@ -226,27 +225,27 @@ app.post('/createCategory', (req, res) => {
  *     responses:
  *       200:
  *         description: A single stock doc
-*/
-app.post('/updateQuantity/:id', async (req, res) => {
-    // TODO: update the stock doc by its ID
-    log("(API) ID TO UPDATE: " + req.params.id);
-    let updatedStock = {
-        _id: req.params.id,
-        quantity: req.body.quantity
+ */
+app.post("/updateQuantity/:id", async (req, res) => {
+  // TODO: update the stock doc by its ID
+  log("(API) ID TO UPDATE: " + req.params.id);
+  let updatedStock = {
+    _id: req.params.id,
+    quantity: req.body.quantity,
+  };
+  try {
+    const dalResponse = await dal.updateQuantity(updatedStock);
+    let response = {
+      code: 200,
+      body: dalResponse,
     };
-    try{
-        const dalResponse = await dal.updateQuantity(updatedStock);
-        let response = {
-        code: 200,
-        body: dalResponse
-        };
-        res.json(response);
-    }catch(e){
-        console.error(e);
-    }
+    res.json(response);
+  } catch (e) {
+    console.error(e);
+  }
 });
 
-/** 
+/**
  * @openapi
  * /updateUsage/:id:
  *   post:
@@ -254,13 +253,13 @@ app.post('/updateQuantity/:id', async (req, res) => {
  *     responses:
  *       200:
  *         description: A single usage doc
-*/
-app.post('/updateUsage/:id', (req, res) => {
-    // TODO: update the usage doc by its ID
-    res.json(data)
+ */
+app.post("/updateUsage/:id", (req, res) => {
+  // TODO: update the usage doc by its ID
+  res.json(data);
 });
 
-/** 
+/**
  * @openapi
  * /updateCategory/:id:
  *   post:
@@ -268,10 +267,58 @@ app.post('/updateUsage/:id', (req, res) => {
  *     responses:
  *       200:
  *         description: A single category doc
-*/
-app.post('/updateCategory/:id', (req, res) => {
-    // TODO: update the category doc by its ID
-    res.json(data)
+ */
+app.post("/updateCategory/:id", (req, res) => {
+  // TODO: update the category doc by its ID
+  res.json(data);
+});
+/**
+ * @openapi
+ * /api/upload:
+ *   post:
+ *     summary: Upload an image to a company subfolder
+ *     description: Uploads an image to Cloudinary. Use 'companyName' to organize into subfolders.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               companyName:
+ *                 type: string
+ *                 description: The name of the company (used for subfolder naming)
+ *                 example: "AcmeCorp"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The image file to upload
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 imageUrl:
+ *                   type: string
+ *                 publicId:
+ *                   type: string
+ */
+app.post("/upload", upload.single("image"), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        res.json({
+            message: "Upload successful!",
+            imageUrl: req.file.path,
+            publicId: req.file.filename,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 module.exports = app;
