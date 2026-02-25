@@ -184,9 +184,23 @@ app.delete("/deleteCategory/:id", (req, res) => {
  *       200:
  *         description: A single stock doc
  */
-app.post("/createStock", (req, res) => {
+app.post("/createStock", async (req, res) => {
   // TODO: create a new stock doc
-  res.json(data);
+    try {
+        const newStock = {
+            stock_name: req.body.stock_name,
+            quantity: req.body.quantity,
+            min_to_restock: req.body.min_to_restock,
+            description: req.body.description,
+            imageUrl: req.body.imageUrl || null,
+        };
+        const dalResponse = await dal.createStock(newStock);
+        res.json({ code: 200, body: dalResponse });
+    }
+    catch(err){
+        console.error("Error creating stock data:", err);
+        res.status(500).send("Error creating stock data");
+    }
 });
 
 /**
@@ -311,6 +325,7 @@ app.post("/upload", upload.single("image"), (req, res) => {
         if (!req.file) {
             return res.status(400).json({ error: "No file uploaded" });
         }
+        log("File uploaded successfully!");
         res.json({
             message: "Upload successful!",
             imageUrl: req.file.path,
