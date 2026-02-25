@@ -4,9 +4,11 @@
     --main-accent: #999999;
 }
 
-* {
+body {
     background-color: var(--main-bg);
     color: var(--main-color);
+    margin: 0;
+    padding: 0;
 }
 nav {
     display: flex;
@@ -21,6 +23,12 @@ form {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+}
+footer {
+    margin: 3rem 0 0 0;
+    padding: 2rem;
+    background-color: #222;
+    text-align: center;
 }
 .stock-item{
     display: flex;
