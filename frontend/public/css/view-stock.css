@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+.add-item {
+    border: 1px solid #ccc;
+    position: sticky;
+    top: 50%;
+    left: 0;
+    margin: 10px;
+    padding: 12px;
+    max-height: fit-content;
+}

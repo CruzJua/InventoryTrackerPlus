@@ -42,6 +42,20 @@ let dal = {
             await client.close()
         }
     },
+    createStock: async function (newStock) {
+        log("DAL - CREATING STOCK");
+        const client = new MongoClient(uri);
+        try{
+            await client.connect()
+            let db = await client.db("DuckView");
+            let coll = await db.collection("Inventory");
+            let result = await coll.insertOne(newStock);
+            log(result);
+            return result;
+        }finally{
+            await client.close()
+        }
+    },
     updateQuantity: async function (updatedStock) {
         log("DAL - UPDATING QUANTITY");
         const client = new MongoClient(uri);
