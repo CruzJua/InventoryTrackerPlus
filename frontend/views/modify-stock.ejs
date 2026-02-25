@@ -11,7 +11,7 @@
             <h2><%=stock.stock_name%> Stock</h2>
             <section>
                 <div class="stock-item">
-                    <img src="<place-holder>" alt="Image of <%= stock.stock_name %>">
+                    <img <%= stock.stock_img ? `src="${stock.stock_img}"` : '' %> alt="Image of <%= stock.stock_name %>">
                     <p>Current Quantity: <%= stock.quantity %></p>
                     <form action="/update-stock-quantity/<%=stock._id%>" method="POST">
                         <label for="quantity">New Quantity:</label>
