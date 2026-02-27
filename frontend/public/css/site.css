@@ -30,6 +30,10 @@ footer {
     background-color: #222;
     text-align: center;
 }
+img {
+    max-width: 20rem;
+    max-height: 20rem;
+}
 .stock-item{
     display: flex;
     flex-direction: column;
