@@ -28,3 +28,6 @@ nav {
     font-style: italic;
     font-size: smaller;
 }
+#description-dropdown {
+    margin-top: 10px;
+}

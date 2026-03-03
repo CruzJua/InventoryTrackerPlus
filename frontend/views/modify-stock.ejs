@@ -1,4 +1,3 @@
-<!--Build this page out to be a submenu of the view-stock page.-->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11,14 +10,14 @@
             <h2><%=stock.stock_name%> Stock</h2>
             <section>
                 <div class="stock-item">
-                    <img src="<place-holder>" alt="Image of <%= stock.stock_name %>">
+                    <!-- <img src="place-holder" alt="Image of <%= stock.stock_name %>"> -->
                     <p>Current Quantity: <%= stock.quantity %></p>
                     <form action="/update-stock-quantity/<%=stock._id%>" method="POST">
                         <label for="quantity">New Quantity:</label>
                         <input type="number" id="quantity" name="quantity" min="0" required>
                         <button type="submit">Update Stock</button>
                     </form>
-                    <details>
+                    <details id="description-dropdown">
                         <summary>Description</summary>
                         <p><%= stock.description %></p>
                     </details>
