@@ -1,0 +1,264 @@
+/* ============================================
+   Contact Us – Page-specific styles
+   Site palette: --main-bg: #2e2b2e | --main-color: #f3f1f3 | --main-accent: #999999
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Hero / Page Header ─────────────────────── */
+.contact-hero {
+    text-align: center;
+    padding: 3.5rem 1rem 2.5rem;
+    background: linear-gradient(160deg, #3a363a 0%, #2e2b2e 60%);
+    border-bottom: 1px solid #444;
+}
+
+.contact-hero h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0 0 0.5rem;
+    color: #f3f1f3;
+}
+
+.contact-hero p {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    color: #aaa;
+    margin: 0;
+}
+
+/* ── Two-column layout wrapper ──────────────── */
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    max-width: 960px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+@media (max-width: 700px) {
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Info Cards (left column) ───────────────── */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.contact-info h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f3f1f3;
+    margin: 0 0 1rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5rem;
+}
+
+.info-card {
+    background: #38343a;
+    border: 1px solid #4a464a;
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    /* Reset anchor defaults when card is an <a> tag */
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.info-card:hover {
+    border-color: #777;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.info-card .card-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.info-card .card-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #999;
+}
+
+.info-card .card-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #f3f1f3;
+    word-break: break-all;
+}
+
+.info-card .card-value a {
+    color: #c0bcc0;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.info-card .card-value a:hover {
+    color: #f3f1f3;
+    text-decoration: underline;
+}
+
+.card-value.placeholder {
+    color: #777;
+    font-style: italic;
+}
+
+/* ── Contact Form (right column) ────────────── */
+.contact-form-container {
+    background: #38343a;
+    border: 1px solid #4a464a;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.contact-form-container h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #f3f1f3;
+    margin: 0 0 1.4rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5rem;
+}
+
+/* Override global form flex so the contact form can lay out naturally */
+.contact-form {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1.1rem !important;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #aaa;
+    letter-spacing: 0.3px;
+}
+
+.form-group input,
+.form-group textarea {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    background: #2e2b2e;
+    color: #f3f1f3;
+    border: 1px solid #555;
+    border-radius: 7px;
+    padding: 0.65rem 0.85rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    resize: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #666;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #888;
+    box-shadow: 0 0 0 3px rgba(150, 150, 150, 0.15);
+}
+
+.form-group textarea {
+    min-height: 130px;
+}
+
+/* Row: two inputs side by side */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 500px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Submit button */
+.btn-submit {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: #f3f1f3;
+    color: #2e2b2e;
+    border: none;
+    border-radius: 7px;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background 0.2s ease, transform 0.15s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-submit:hover {
+    background: #ddd;
+    transform: translateY(-1px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* ── Success / Error message strip ─────────── */
+.form-message {
+    display: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    margin-top: 0.25rem;
+}
+
+.form-message.success {
+    background: #1e3a2e;
+    color: #7ecfa4;
+    border: 1px solid #3a6a50;
+    display: block;
+}
+
+.form-message.error {
+    background: #3a1e1e;
+    color: #cf7e7e;
+    border: 1px solid #6a3a3a;
+    display: block;
+}
