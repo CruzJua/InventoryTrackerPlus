@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const nodemailer = require("nodemailer");
 
 const { upload } = require("./utils/cloudinary");
 const { dal } = require("./mongoDAL");
@@ -334,6 +335,59 @@ app.post("/upload", upload.single("image"), (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+/**
+ * @openapi
+ * /contact:
+ *   post:
+ *     summary: Send a contact form message via email
+ *     responses:
+ *       200:
+ *         description: Email sent successfully
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Failed to send email
+ */
+app.post("/contact", async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ code: 400, error: "Name, email, and message are required." });
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_APP_PASSWORD,
+    },
+  });
+
+  const mailOptions = {
+    from: `"InventoryTracker+ Contact" <${process.env.GMAIL_USER}>`,
+    to: process.env.GMAIL_USER,
+    replyTo: `"${name}" <${email}>`,
+    subject: subject ? `[Contact Form] ${subject}` : `[Contact Form] Message from ${name}`,
+    html: `
+      <h2>New Contact Form Submission</h2>
+      <p><strong>From:</strong> ${name} &lt;${email}&gt;</p>
+      <hr />
+      <p>${message.replace(/\n/g, "<br/>")}</p>
+      <hr />
+      <p style="color:#888;font-size:12px;">Sent via InventoryTracker+ contact form</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    log("(API) Contact form email sent successfully");
+    res.json({ code: 200, message: "Email sent successfully." });
+  } catch (err) {
+    console.error("Error sending contact email:", err);
+    res.status(500).json({ code: 500, error: "Failed to send email. Please try again later." });
+  }
 });
 
 module.exports = app;
