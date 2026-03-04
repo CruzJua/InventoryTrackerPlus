@@ -157,9 +157,21 @@ app.delete("/deleteUsage/:id", (req, res) => {
  *       200:
  *         description: A single stock doc
  */
-app.delete("/deleteStock/:id", (req, res) => {
+app.delete("/deleteStock/:id", async (req, res) => {
   // TODO: delete the stock doc by its ID
-  res.json(data);
+  console.log("(API) ID TO DELETE: " + req.params.id);
+  const _id = req.params.id;
+  try{
+    let dalResponse = await dal.deleteStock(_id);
+    let response = {
+    code: 200,
+    body: dalResponse
+  };
+  res.json(response);
+  }catch(e){
+    console.error(e);
+  }
+  
 });
 
 /**
