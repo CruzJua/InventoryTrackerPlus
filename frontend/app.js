@@ -25,6 +25,12 @@ app.get("/", (req, res) => {
 app.get("/contact-us", (req, res) => {
     res.render("contact-us");
 });
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+app.get("/register", (req, res) => {
+    res.render("register");
+});
 app.get("/inventory", async (req, res) => {
     log("(FRONT-END) GETTING ALL STOCK");
     const url = `${API_URL}stock`;

@@ -1,0 +1,369 @@
+/* ============================================
+   Auth Pages – Login & Register
+   Global palette vars live in site.css :root
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* ── Auth – Page Variables ─────────────────────────── */
+
+    /* Card surface */
+    --auth-surface: #38343a;
+    --auth-border: #4a464a;
+    --auth-card-shadow: rgba(0, 0, 0, 0.45);
+
+    /* Text hierarchy */
+    --auth-text-muted: #999999;
+    --auth-text-label: #aaaaaa;
+    --auth-text-placeholder: #666666;
+
+    /* Input */
+    --auth-input-border: #555555;
+    --auth-input-border-focus: #888888;
+    --auth-input-shadow-focus: rgba(150, 150, 150, 0.15);
+
+    /* Toggle / icon button */
+    --auth-toggle-color: #777777;
+    --auth-toggle-hover: #bbbbbb;
+
+    /* Strength track */
+    --auth-strength-track: #555555;
+    --auth-strength-label: #888888;
+    --auth-strength-weak: #cf7e7e;
+    --auth-strength-fair: #d4a84b;
+    --auth-strength-strong: #7ecfa4;
+
+    /* Extras row */
+    --auth-remember-color: #aaaaaa;
+    --auth-forgot-color: #888888;
+
+    /* Submit button */
+    --auth-btn-bg: #f3f1f3;
+    --auth-btn-color: #2e2b2e;
+    --auth-btn-bg-hover: #dddddd;
+    --auth-btn-shadow: rgba(0, 0, 0, 0.3);
+
+    /* Switch link */
+    --auth-switch-color: #888888;
+    --auth-link: #c0bcc0;
+
+    /* Feedback messages */
+    --auth-success-bg: #1e3a2e;
+    --auth-success-color: #7ecfa4;
+    --auth-success-border: #3a6a50;
+    --auth-error-bg: #3a1e1e;
+    --auth-error-color: #cf7e7e;
+    --auth-error-border: #6a3a3a;
+}
+
+/* ── Page wrapper: center the card ────────── */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2.5rem 1rem 4rem;
+    min-height: calc(100vh - 200px);
+}
+
+/* ── Auth card ──────────────────────────── */
+.auth-card {
+    background: var(--auth-surface);
+    border: 1px solid var(--auth-border);
+    border-radius: 14px;
+    padding: 2.5rem 2.5rem 2rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 8px 40px var(--auth-card-shadow);
+    animation: cardIn 0.35s ease both;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Brand / heading block ─────────────── */
+.auth-brand {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-brand-icon {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 0.6rem;
+    filter: drop-shadow(0 2px 6px var(--auth-card-shadow));
+}
+
+.auth-brand h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--main-color);
+    margin: 0 0 0.3rem;
+    letter-spacing: -0.4px;
+}
+
+.auth-brand p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--auth-text-muted);
+    margin: 0;
+}
+
+/* ── Form layout ──────────────────────── */
+.auth-form {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1rem !important;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 420px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-card {
+        padding: 2rem 1.4rem;
+    }
+}
+
+/* ── Form groups ──────────────────────── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--auth-text-label);
+    letter-spacing: 0.3px;
+}
+
+.form-group input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    background: var(--main-bg);
+    color: var(--main-color);
+    border: 1px solid var(--auth-input-border);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+    color: var(--auth-text-placeholder);
+}
+
+.form-group input:focus {
+    border-color: var(--auth-input-border-focus);
+    box-shadow: 0 0 0 3px var(--auth-input-shadow-focus);
+}
+
+/* ── Password wrapper (input + eye toggle) */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 2.8rem;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0.7rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--auth-toggle-color);
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: var(--auth-toggle-hover);
+}
+
+/* ── Password strength bar ─────────────── */
+.password-strength {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+}
+
+.strength-track {
+    flex: 1;
+    height: 4px;
+    background: var(--auth-strength-track);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.strength-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: var(--auth-strength-label);
+    white-space: nowrap;
+    min-width: 44px;
+    text-align: right;
+}
+
+/* Strength levels */
+.strength-fill.weak {
+    width: 33%;
+    background: var(--auth-strength-weak);
+}
+
+.strength-fill.fair {
+    width: 66%;
+    background: var(--auth-strength-fair);
+}
+
+.strength-fill.strong {
+    width: 100%;
+    background: var(--auth-strength-strong);
+}
+
+/* ── Remember me + Forgot row ──────────── */
+.form-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.remember-me {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--auth-remember-color);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remember-me input[type="checkbox"] {
+    accent-color: var(--main-color);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+.forgot-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--auth-forgot-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: var(--main-color);
+    text-decoration: underline;
+}
+
+/* ── Submit button ─────────────────────── */
+.btn-auth {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: var(--auth-btn-bg);
+    color: var(--auth-btn-color);
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 0.25rem;
+    letter-spacing: 0.3px;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn-auth:hover {
+    background: var(--auth-btn-bg-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px var(--auth-btn-shadow);
+}
+
+.btn-auth:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ── Switch link (Login ↔ Register) ─────── */
+.auth-switch {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--auth-switch-color);
+    text-align: center;
+    margin: 0.25rem 0 0;
+}
+
+.auth-switch a {
+    color: var(--auth-link);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.auth-switch a:hover {
+    color: var(--main-color);
+    text-decoration: underline;
+}
+
+/* ── Success / Error message ────────────── */
+.form-message {
+    display: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+}
+
+.form-message.success {
+    background: var(--auth-success-bg);
+    color: var(--auth-success-color);
+    border: 1px solid var(--auth-success-border);
+    display: block;
+}
+
+.form-message.error {
+    background: var(--auth-error-bg);
+    color: var(--auth-error-color);
+    border: 1px solid var(--auth-error-border);
+    display: block;
+}
