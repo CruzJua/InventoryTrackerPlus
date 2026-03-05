@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const nodemailer = require("nodemailer");
+const bcrypt = require("bcryptjs");
+
 
 const { upload } = require("./utils/cloudinary");
 const { dal } = require("./mongoDAL");
@@ -61,23 +63,17 @@ app.get("/api", (req, res) => {
  */
 app.get("/stock", async (req, res) => {
   log("(API) GETTING ALL STOCK");
+  const dbName = req.query.dbName;
+  if (!dbName) return res.status(400).json({ error: "dbName is required" });
   const filter = {};
-  if (req.query.name) {
-    filter.name = req.query.name;
-  }
-  if (req.query.category) {
-    filter.category = req.query.category;
-  }
-  // TODO: implement the filter in the DAL, validate filter in API before passing to DAL
+  if (req.query.name)     filter.name = req.query.name;
+  if (req.query.category) filter.category = req.query.category;
   try {
-    const dalResponse = await dal.getAllStock();
-    let response = {
-      code: 200,
-      body: dalResponse,
-    };
-    res.json(response);
+    const dalResponse = await dal.getAllStock(dbName);
+    res.json({ code: 200, body: dalResponse });
   } catch (e) {
     console.error(e);
+    res.status(500).json({ error: "Failed to fetch stock" });
   }
 });
 
@@ -91,17 +87,15 @@ app.get("/stock", async (req, res) => {
  *         description: A single stock doc
  */
 app.get("/stock/:id", async (req, res) => {
-  // TODO: get a single stock doc by id
+  const dbName = req.query.dbName;
   const _id = req.params.id;
+  if (!dbName) return res.status(400).json({ error: "dbName is required" });
   try {
-    const dalResponse = await dal.getSingleStock(_id);
-    let response = {
-      code: 200,
-      body: dalResponse,
-    };
-    res.json(response);
+    const dalResponse = await dal.getSingleStock(dbName, _id);
+    res.json({ code: 200, body: dalResponse });
   } catch (e) {
     console.error(e);
+    res.status(500).json({ error: "Failed to fetch stock item" });
   }
 });
 
@@ -186,8 +180,9 @@ app.delete("/deleteCategory/:id", (req, res) => {
  *         description: A single stock doc
  */
 app.post("/createStock", async (req, res) => {
-  // TODO: create a new stock doc
     try {
+        const dbName = req.body.dbName;
+        if (!dbName) return res.status(400).json({ error: "dbName is required" });
         const newStock = {
             stock_name: req.body.stock_name,
             quantity: req.body.quantity,
@@ -195,7 +190,7 @@ app.post("/createStock", async (req, res) => {
             description: req.body.description,
             imageUrl: req.body.imageUrl || null,
         };
-        const dalResponse = await dal.createStock(newStock);
+        const dalResponse = await dal.createStock(dbName, newStock);
         res.json({ code: 200, body: dalResponse });
     }
     catch(err){
@@ -242,21 +237,19 @@ app.post("/createCategory", (req, res) => {
  *         description: A single stock doc
  */
 app.post("/updateQuantity/:id", async (req, res) => {
-  // TODO: update the stock doc by its ID
   log("(API) ID TO UPDATE: " + req.params.id);
+  const dbName = req.body.dbName;
+  if (!dbName) return res.status(400).json({ error: "dbName is required" });
   let updatedStock = {
     _id: req.params.id,
     quantity: req.body.quantity,
   };
   try {
-    const dalResponse = await dal.updateQuantity(updatedStock);
-    let response = {
-      code: 200,
-      body: dalResponse,
-    };
-    res.json(response);
+    const dalResponse = await dal.updateQuantity(dbName, updatedStock);
+    res.json({ code: 200, body: dalResponse });
   } catch (e) {
     console.error(e);
+    res.status(500).json({ error: "Failed to update quantity" });
   }
 });
 
@@ -390,4 +383,90 @@ app.post("/contact", async (req, res) => {
   }
 });
 
+
+/**
+ * @openapi
+ * /register:
+ *   post:
+ *     summary: Register a new user account
+ *     responses:
+ *       200:
+ *         description: Account created successfully
+ *       400:
+ *         description: Missing or invalid fields
+ *       409:
+ *         description: Email already registered
+ */
+app.post("/register", async (req, res) => {
+    const { firstName, lastName, email, password, businessName } = req.body;
+
+    if (!firstName || !lastName || !email || !password || !businessName)
+        return res.status(400).json({ error: "All fields are required." });
+    if (password.length < 8)
+        return res.status(400).json({ error: "Password must be at least 8 characters." });
+
+    const dbName = businessName
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]/g, "")
+        .trim()
+        .replace(/\s+/g, "_");
+    const passwordHash = await bcrypt.hash(password, 12);
+    const result = await dal.createUser({ firstName, lastName, email, passwordHash, businessName, dbName });
+
+    if (result.error) return res.status(409).json({ error: result.error });
+
+    res.json({ code: 200, message: "Account created. Please log in." });
+});
+
+/**
+ * @openapi
+ * /login:
+ *   post:
+ *     summary: Log in to an existing account
+ *     responses:
+ *       200:
+ *         description: Logged in successfully
+ *       400:
+ *         description: Missing fields
+ *       401:
+ *         description: Invalid credentials
+ */
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password)
+        return res.status(400).json({ error: "Email and password are required." });
+
+    const user = await dal.getUserByEmail(email);
+    if (!user) return res.status(401).json({ error: "Invalid email or password." });
+
+    const match = await bcrypt.compare(password, user.passwordHash);
+    if (!match) return res.status(401).json({ error: "Invalid email or password." });
+
+    req.session.userId      = user._id;
+    req.session.userName    = user.firstName;
+    req.session.dbName      = user.dbName;
+    req.session.businessName = user.businessName;
+
+    res.json({ code: 200, message: "Logged in.", name: user.firstName });
+});
+
+/**
+ * @openapi
+ * /logout:
+ *   post:
+ *     summary: Log out the current user
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ */
+app.post("/logout", (req, res) => {
+    req.session.destroy(err => {
+        if (err) return res.status(500).json({ error: "Could not log out." });
+        res.clearCookie("connect.sid");
+        res.json({ code: 200, message: "Logged out." });
+    });
+});
+
 module.exports = app;
+
