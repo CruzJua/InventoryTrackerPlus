@@ -69,7 +69,7 @@ app.get("/stock", async (req, res) => {
   if (req.query.name)     filter.name = req.query.name;
   if (req.query.category) filter.category = req.query.category;
   try {
-    const dalResponse = await dal.getAllStock();
+    const dalResponse = await dal.getAllStock(dbName);
     let response = {
       code: 200,
       body: dalResponse,
@@ -91,11 +91,11 @@ app.get("/stock", async (req, res) => {
  *         description: A single stock doc
  */
 app.get("/stock/:id", async (req, res) => {
-  // TODO: get a single stock doc by id
+  const dbName = req.query.dbName;
   const _id = req.params.id;
   if (!dbName) return res.status(400).json({ error: "dbName is required" });
   try {
-    const dalResponse = await dal.getSingleStock(_id);
+    const dalResponse = await dal.getSingleStock(dbName, _id);
     let response = {
       code: 200,
       body: dalResponse,
@@ -160,20 +160,17 @@ app.delete("/deleteUsage/:id", (req, res) => {
  *         description: A single stock doc
  */
 app.delete("/deleteStock/:id", async (req, res) => {
-  // TODO: delete the stock doc by its ID
   console.log("(API) ID TO DELETE: " + req.params.id);
+  const dbName = req.query.dbName;
   const _id = req.params.id;
+  if (!dbName) return res.status(400).json({ error: "dbName is required" });
   try{
-    let dalResponse = await dal.deleteStock(_id);
-    let response = {
-    code: 200,
-    body: dalResponse
-  };
-  res.json(response);
+    let dalResponse = await dal.deleteStock(dbName, _id);
+    res.json({ code: 200, body: dalResponse });
   }catch(e){
     console.error(e);
+    res.status(500).json({ error: "Failed to delete stock item" });
   }
-  
 });
 
 /**
@@ -210,7 +207,7 @@ app.post("/createStock", async (req, res) => {
             description: req.body.description,
             imageUrl: req.body.imageUrl || null,
         };
-        const dalResponse = await dal.createStock(newStock);
+        const dalResponse = await dal.createStock(dbName, newStock);
         res.json({ code: 200, body: dalResponse });
     }
     catch(err){
@@ -265,7 +262,7 @@ app.post("/updateQuantity/:id", async (req, res) => {
     quantity: req.body.quantity,
   };
   try {
-    const dalResponse = await dal.updateQuantity(updatedStock);
+    const dalResponse = await dal.updateQuantity(dbName, updatedStock);
     let response = {
       code: 200,
       body: dalResponse,

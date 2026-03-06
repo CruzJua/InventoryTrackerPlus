@@ -80,14 +80,13 @@ app.get("/create-stock", requireAuth, async (req, res) => {
   res.render("create-stock");
 });
 
-app.get("/delete-stock/:id", requireAuth, async (req, res) =>{
+app.get("/delete-stock/:id", requireAuth, async (req, res) => {
   log("ID TO DELETE: " + req.params.id);
-  const params = req.params.id
-  const url = `${API_URL}deleteStock/${params}`;
+  const url = `${API_URL}deleteStock/${req.params.id}?dbName=${req.session.dbName}`;
   try{
     fetch(url, {method: "DELETE"})
     .then(res => res.json())
-    .then(data =>{
+    .then(data => {
       log(data);
       res.redirect("/inventory");
     });

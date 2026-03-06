@@ -15,7 +15,7 @@ app.use(session({
         dbName: "InventoryTrackerPlus",
         collectionName: "Sessions"
     }),
-    cookie: { maxAge: 1000 * 60 * 60 * 24 }  // 1 day
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
 const frontendApp = require("./frontend/app");
