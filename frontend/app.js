@@ -19,15 +19,35 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+    res.locals.user = req.session?.userId
+        ? { name: req.session.userName, businessName: req.session.businessName }
+        : null;
+    next();
+});
+
 app.get("/", (req, res) => {
     res.render("homepage");
 });
 app.get("/contact-us", (req, res) => {
     res.render("contact-us");
 });
-app.get("/inventory", async (req, res) => {
+
+function redirectIfLoggedIn(req, res, next) {
+    if (req.session?.userId) return res.redirect("/inventory");
+    next();
+}
+
+function requireAuth(req, res, next) {
+    if (!req.session?.userId) return res.redirect("/login");
+    next();
+}
+
+app.get("/login",    redirectIfLoggedIn, (req, res) => { res.render("login"); });
+app.get("/register", redirectIfLoggedIn, (req, res) => { res.render("register"); });
+app.get("/inventory", requireAuth, async (req, res) => {
     log("(FRONT-END) GETTING ALL STOCK");
-    const url = `${API_URL}stock`;
+    const url = `${API_URL}stock?dbName=${req.session.dbName}`;
     try {
     fetch(url)
       .then((res) => res.json())
@@ -41,9 +61,9 @@ app.get("/inventory", async (req, res) => {
     res.status(500).send("Error fetching stock data");
   }
 });
-app.get("/modify-stock/:id", async (req, res) => {
+app.get("/modify-stock/:id", requireAuth, async (req, res) => {
   const stockId = req.params.id;
-  const url = `${API_URL}stock/${stockId}`;
+  const url = `${API_URL}stock/${stockId}?dbName=${req.session.dbName}`;
   try {
     fetch(url)
       .then((res) => res.json())
@@ -56,18 +76,17 @@ app.get("/modify-stock/:id", async (req, res) => {
     res.status(500).send("Error fetching stock data");
   }
 });
-app.get("/create-stock", async (req, res) => {
+app.get("/create-stock", requireAuth, async (req, res) => {
   res.render("create-stock");
 });
 
-app.get("/delete-stock/:id", async (req, res) =>{
+app.get("/delete-stock/:id", requireAuth, async (req, res) => {
   log("ID TO DELETE: " + req.params.id);
-  const params = req.params.id
-  const url = `${API_URL}deleteStock/${params}`;
+  const url = `${API_URL}deleteStock/${req.params.id}?dbName=${req.session.dbName}`;
   try{
     fetch(url, {method: "DELETE"})
     .then(res => res.json())
-    .then(data =>{
+    .then(data => {
       log(data);
       res.redirect("/inventory");
     });
@@ -77,11 +96,12 @@ app.get("/delete-stock/:id", async (req, res) =>{
   }
 });
 
-app.post("/update-stock-quantity/:id", async (req, res) => {
+app.post("/update-stock-quantity/:id", requireAuth, async (req, res) => {
   //console.log(req);
   const requestBody = {
     _id: req.params.id,
     quantity: req.body.quantity,
+    dbName: req.session.dbName,
   };
   let headers = {
     method: "POST",
@@ -103,15 +123,15 @@ app.post("/update-stock-quantity/:id", async (req, res) => {
     res.status(500).send("Error updating stock data");
   }
 });
-app.post("/create-stock", upload.single("image"), async (req, res) => {
+app.post("/create-stock", requireAuth, upload.single("image"), async (req, res) => {
   try {
-    // If a file was uploaded, req.file.path is the Cloudinary URL (set by multer-storage-cloudinary)
     const imageUrl = req.file ? req.file.path : null;
 
     const stockResponse = await fetch(`${API_URL}createStock`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        dbName: req.session.dbName,
         stock_name: req.body.stock_name,
         quantity: req.body.quantity,
         min_to_restock: req.body.min_to_restock,

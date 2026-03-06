@@ -2,6 +2,22 @@ const express = require("express");
 const app = express();
 require("dotenv").config({ path: ".env" });
 
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.CONNECTION_STRING,
+        dbName: "InventoryTrackerPlus",
+        collectionName: "Sessions"
+    }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }
+}));
+
 const frontendApp = require("./frontend/app");
 const backendApp = require("./backend/app");
 
