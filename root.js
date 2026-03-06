@@ -3,7 +3,7 @@ const app = express();
 require("dotenv").config({ path: ".env" });
 
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const { MongoStore } = require("connect-mongo");
 
 
 app.use(session({
