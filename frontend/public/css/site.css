@@ -6,6 +6,11 @@
 
     /* ── Footer ───────────────────────────────── */
     --footer-bg: #222222;
+
+    /* ── Nav ──────────────────────────────────── */
+    --nav-user-color: #bbbbbb;
+    --nav-logout-color: #cf7e7e;
+    --nav-logout-hover: #e09090;
 }
 
 body {
@@ -59,4 +64,32 @@ img {
     color: var(--main-accent);
     font-style: italic;
     font-size: smaller;
+}
+
+/* ── Nav: user greeting & logout button ───── */
+.nav-user {
+    font-size: 0.85rem;
+    color: var(--nav-user-color);
+    padding: 0 0.5rem;
+}
+
+/* Reset the inline logout <form> so it doesn't
+   inherit the global "form { display:flex ... }" */
+nav form {
+    display: inline;
+    flex-direction: unset;
+    align-items: unset;
+    gap: unset;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-button--logout {
+    color: var(--nav-logout-color);
+    border-color: var(--nav-logout-color);
+}
+
+.nav-button--logout:hover {
+    color: var(--nav-logout-hover);
+    border-color: var(--nav-logout-hover);
 }

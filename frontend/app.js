@@ -19,6 +19,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+    res.locals.user = req.session?.userId
+        ? { name: req.session.userName, businessName: req.session.businessName }
+        : null;
+    next();
+});
+
 app.get("/", (req, res) => {
     res.render("homepage");
 });
@@ -26,13 +33,11 @@ app.get("/contact-us", (req, res) => {
     res.render("contact-us");
 });
 
-// Redirect already-logged-in users away from auth pages
 function redirectIfLoggedIn(req, res, next) {
     if (req.session?.userId) return res.redirect("/inventory");
     next();
 }
 
-// Block unauthenticated users from protected pages
 function requireAuth(req, res, next) {
     if (!req.session?.userId) return res.redirect("/login");
     next();

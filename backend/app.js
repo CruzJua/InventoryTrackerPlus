@@ -464,7 +464,7 @@ app.post("/logout", (req, res) => {
     req.session.destroy(err => {
         if (err) return res.status(500).json({ error: "Could not log out." });
         res.clearCookie("connect.sid");
-        res.json({ code: 200, message: "Logged out." });
+        res.redirect("/");
     });
 });
 

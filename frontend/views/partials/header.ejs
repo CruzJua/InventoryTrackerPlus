@@ -1,13 +1,17 @@
 <header>
     <img src="/images/logo.webp" alt="Site Logo" id="logo" />
     <div class="site-header">
-
         <h1>Inventory Tracker+</h1>
-
     </div>
     <nav>
         <a href="/"><button class="nav-button">Home Page</button></a>
         <a href="/inventory"><button class="nav-button">Inventory</button></a>
-        <a href="/login"><button class="nav-button">Log In</button></a>
+        <% if (locals.user) { %>
+            <form action="/api/logout" method="POST" style="display:inline">
+                <button type="submit" class="nav-button nav-button--logout">Log Out</button>
+            </form>
+            <% } else { %>
+                <a href="/login"><button class="nav-button">Log In</button></a>
+                <% } %>
     </nav>
 </header>
