@@ -102,6 +102,20 @@ let dal = {
         }finally{
             await client.close()
         }
+    },
+    deleteStock: async function (_id) {
+        log("DELETING STOCK WITH ID: " + _id);
+        const client = new MongoClient(uri);
+        try{
+            await client.connect();
+            let db = await client.db("DuckView");
+            let coll = await db.collection("Inventory");
+            await coll.deleteOne({_id: new ObjectId(_id)});
+            log("Deleted stock with ID: " + _id);
+            return ("Deleted stock with ID: " + _id);
+        }finally{
+            await client.close();
+        }
     }
 }
 exports.dal = dal;

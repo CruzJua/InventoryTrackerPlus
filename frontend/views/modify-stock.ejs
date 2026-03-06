@@ -15,23 +15,21 @@
             </h2>
             <section>
                 <div class="stock-item">
-                    <img <%=stock.imageUrl ? `src=${stock.imageUrl}` : '' %> alt="Image of <%= stock.stock_name %>">
-                        <p>Current Quantity: <%= stock.quantity %>
-                        </p>
-                        <form action="/update-stock-quantity/<%=stock._id%>" method="POST">
-                            <label for="quantity">New Quantity:</label>
-                            <input type="number" id="quantity" name="quantity" min="0" required>
-                            <button type="submit">Update Stock</button>
-                        </form>
-                        <details>
-                            <summary>Description</summary>
-                            <p>
-                                <%= stock.description %>
-                            </p>
-                        </details>
-                        <p class="restock-amount">Restock when Current Quantity is less or equal to: <%=
-                                stock.min_to_restock %>
-                        </p>
+                    <img <%= stock.imageUrl ? `src=${stock.imageUrl}` : '' %> alt="Image of <%= stock.stock_name %>">
+                    <p>Current Quantity: <%= stock.quantity %></p>
+                    <form action="/update-stock-quantity/<%=stock._id%>" method="POST">
+                        <label for="quantity">New Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" min="0" required>
+                        <button type="submit">Update Stock</button>
+                    </form>
+                    <details>
+                        <summary>Description</summary>
+                        <p><%= stock.description %></p>
+                    </details>
+                    <container class= "delete-stock-link">
+                        <a href="/delete-stock/<%=stock._id%>" onclick="return confirm('Are you sure you want to delete this stock item?');">Delete Stock Item</a>
+                    </container>
+                    <p class="restock-amount">Restock when Current Quantity is less or equal to: <%= stock.min_to_restock %></p>
                 </div>
             </section>
         </section>

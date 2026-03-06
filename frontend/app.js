@@ -80,7 +80,25 @@ app.get("/create-stock", requireAuth, async (req, res) => {
   res.render("create-stock");
 });
 
+app.get("/delete-stock/:id", requireAuth, async (req, res) =>{
+  log("ID TO DELETE: " + req.params.id);
+  const params = req.params.id
+  const url = `${API_URL}deleteStock/${params}`;
+  try{
+    fetch(url, {method: "DELETE"})
+    .then(res => res.json())
+    .then(data =>{
+      log(data);
+      res.redirect("/inventory");
+    });
+  }catch(e){
+    console.error("Error deleting stock data: ", e);
+    res.status(500).send("Error deleting stock data");
+  }
+});
+
 app.post("/update-stock-quantity/:id", requireAuth, async (req, res) => {
+  //console.log(req);
   const requestBody = {
     _id: req.params.id,
     quantity: req.body.quantity,
