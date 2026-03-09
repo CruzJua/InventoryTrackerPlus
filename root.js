@@ -3,14 +3,14 @@ const app = express();
 require("dotenv").config({ path: ".env" });
 
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const { MongoStore } = require("connect-mongo");
 
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
+    store: new MongoStore({
         mongoUrl: process.env.CONNECTION_STRING,
         dbName: "InventoryTrackerPlus",
         collectionName: "Sessions"
