@@ -1,16 +1,59 @@
 /* ============================================
    Contact Us – Page-specific styles
-   Site palette: --main-bg: #2e2b2e | --main-color: #f3f1f3 | --main-accent: #999999
+   Global palette vars live in site.css :root
    ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* ── Contact Us – Page Variables ──────────────────── */
+
+    /* Hero */
+    --cu-hero-bg-start: #3a363a;
+    --cu-hero-border: #444444;
+    --cu-hero-muted: #aaaaaa;
+
+    /* Cards / Form surfaces */
+    --cu-surface: #38343a;
+    --cu-border: #4a464a;
+    --cu-border-hover: #777777;
+
+    /* Text hierarchy */
+    --cu-text-label: #999999;
+    --cu-text-muted: #aaaaaa;
+    --cu-text-placeholder: #777777;
+
+    /* Input */
+    --cu-input-border: #555555;
+    --cu-input-border-focus: #888888;
+    --cu-input-shadow-focus: rgba(150, 150, 150, 0.15);
+
+    /* Link inside card */
+    --cu-link: #c0bcc0;
+
+    /* Submit button */
+    --cu-btn-bg: #f3f1f3;
+    --cu-btn-color: #2e2b2e;
+    --cu-btn-bg-hover: #dddddd;
+
+    /* Card hover shadow */
+    --cu-card-shadow: rgba(0, 0, 0, 0.35);
+
+    /* Feedback messages */
+    --cu-success-bg: #1e3a2e;
+    --cu-success-color: #7ecfa4;
+    --cu-success-border: #3a6a50;
+    --cu-error-bg: #3a1e1e;
+    --cu-error-color: #cf7e7e;
+    --cu-error-border: #6a3a3a;
+}
 
 /* ── Hero / Page Header ─────────────────────── */
 .contact-hero {
     text-align: center;
     padding: 3.5rem 1rem 2.5rem;
-    background: linear-gradient(160deg, #3a363a 0%, #2e2b2e 60%);
-    border-bottom: 1px solid #444;
+    background: linear-gradient(160deg, var(--cu-hero-bg-start) 0%, var(--main-bg) 60%);
+    border-bottom: 1px solid var(--cu-hero-border);
 }
 
 .contact-hero h2 {
@@ -19,13 +62,13 @@
     font-weight: 700;
     letter-spacing: -0.5px;
     margin: 0 0 0.5rem;
-    color: #f3f1f3;
+    color: var(--main-color);
 }
 
 .contact-hero p {
     font-family: 'Inter', sans-serif;
     font-size: 1.05rem;
-    color: #aaa;
+    color: var(--cu-hero-muted);
     margin: 0;
 }
 
@@ -54,35 +97,33 @@
 
 .contact-info h3 {
     font-family: 'Inter', sans-serif;
-    font-size: 1.1rem;
     font-weight: 600;
-    color: #f3f1f3;
+    color: var(--main-color);
     margin: 0 0 1rem;
     letter-spacing: 0.4px;
     text-transform: uppercase;
     font-size: 0.85rem;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--cu-hero-border);
     padding-bottom: 0.5rem;
 }
 
 .info-card {
-    background: #38343a;
-    border: 1px solid #4a464a;
+    background: var(--cu-surface);
+    border: 1px solid var(--cu-border);
     border-radius: 10px;
     padding: 1.1rem 1.3rem;
     display: flex;
     align-items: flex-start;
     gap: 1rem;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    /* Reset anchor defaults when card is an <a> tag */
     text-decoration: none;
     color: inherit;
     cursor: pointer;
 }
 
 .info-card:hover {
-    border-color: #777;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    border-color: var(--cu-border-hover);
+    box-shadow: 0 4px 18px var(--cu-card-shadow);
 }
 
 .info-card .card-icon {
@@ -104,36 +145,36 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: #999;
+    color: var(--cu-text-label);
 }
 
 .info-card .card-value {
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
-    color: #f3f1f3;
+    color: var(--main-color);
     word-break: break-all;
 }
 
 .info-card .card-value a {
-    color: #c0bcc0;
+    color: var(--cu-link);
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .info-card .card-value a:hover {
-    color: #f3f1f3;
+    color: var(--main-color);
     text-decoration: underline;
 }
 
 .card-value.placeholder {
-    color: #777;
+    color: var(--cu-text-placeholder);
     font-style: italic;
 }
 
 /* ── Contact Form (right column) ────────────── */
 .contact-form-container {
-    background: #38343a;
-    border: 1px solid #4a464a;
+    background: var(--cu-surface);
+    border: 1px solid var(--cu-border);
     border-radius: 12px;
     padding: 2rem;
 }
@@ -144,9 +185,9 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.4px;
-    color: #f3f1f3;
+    color: var(--main-color);
     margin: 0 0 1.4rem;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--cu-hero-border);
     padding-bottom: 0.5rem;
 }
 
@@ -168,7 +209,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.8rem;
     font-weight: 500;
-    color: #aaa;
+    color: var(--cu-text-muted);
     letter-spacing: 0.3px;
 }
 
@@ -176,9 +217,9 @@
 .form-group textarea {
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
-    background: #2e2b2e;
-    color: #f3f1f3;
-    border: 1px solid #555;
+    background: var(--main-bg);
+    color: var(--main-color);
+    border: 1px solid var(--cu-input-border);
     border-radius: 7px;
     padding: 0.65rem 0.85rem;
     outline: none;
@@ -188,13 +229,13 @@
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: #666;
+    color: var(--cu-text-placeholder);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: #888;
-    box-shadow: 0 0 0 3px rgba(150, 150, 150, 0.15);
+    border-color: var(--cu-input-border-focus);
+    box-shadow: 0 0 0 3px var(--cu-input-shadow-focus);
 }
 
 .form-group textarea {
@@ -219,8 +260,8 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
-    background: #f3f1f3;
-    color: #2e2b2e;
+    background: var(--cu-btn-bg);
+    color: var(--cu-btn-color);
     border: none;
     border-radius: 7px;
     padding: 0.75rem 1.5rem;
@@ -231,7 +272,7 @@
 }
 
 .btn-submit:hover {
-    background: #ddd;
+    background: var(--cu-btn-bg-hover);
     transform: translateY(-1px);
 }
 
@@ -250,15 +291,15 @@
 }
 
 .form-message.success {
-    background: #1e3a2e;
-    color: #7ecfa4;
-    border: 1px solid #3a6a50;
+    background: var(--cu-success-bg);
+    color: var(--cu-success-color);
+    border: 1px solid var(--cu-success-border);
     display: block;
 }
 
 .form-message.error {
-    background: #3a1e1e;
-    color: #cf7e7e;
-    border: 1px solid #6a3a3a;
+    background: var(--cu-error-bg);
+    color: var(--cu-error-color);
+    border: 1px solid var(--cu-error-border);
     display: block;
 }

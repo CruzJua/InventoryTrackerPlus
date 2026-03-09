@@ -1,7 +1,16 @@
 :root {
+    /* ── Global Palette ───────────────────────── */
     --main-bg: #2e2b2e;
     --main-color: #f3f1f3;
     --main-accent: #999999;
+
+    /* ── Footer ───────────────────────────────── */
+    --footer-bg: #222222;
+
+    /* ── Nav ──────────────────────────────────── */
+    --nav-user-color: #bbbbbb;
+    --nav-logout-color: #cf7e7e;
+    --nav-logout-hover: #e09090;
 }
 
 body {
@@ -10,31 +19,37 @@ body {
     margin: 0;
     padding: 0;
 }
+
 nav {
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
+
 header {
     margin: 0px 0px 3rem 0px;
 }
+
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
 }
+
 footer {
     margin: 3rem 0 0 0;
     padding: 2rem;
-    background-color: #222;
+    background-color: var(--footer-bg);
     text-align: center;
 }
+
 img {
     max-width: 20rem;
     max-height: 20rem;
 }
-.stock-item{
+
+.stock-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -43,9 +58,38 @@ img {
     padding: 10px;
     margin: 10px;
 }
+
 .restock-amount {
-    font-weight:lighter;
+    font-weight: lighter;
     color: var(--main-accent);
     font-style: italic;
     font-size: smaller;
+}
+
+/* ── Nav: user greeting & logout button ───── */
+.nav-user {
+    font-size: 0.85rem;
+    color: var(--nav-user-color);
+    padding: 0 0.5rem;
+}
+
+/* Reset the inline logout <form> so it doesn't
+   inherit the global "form { display:flex ... }" */
+nav form {
+    display: inline;
+    flex-direction: unset;
+    align-items: unset;
+    gap: unset;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-button--logout {
+    color: var(--nav-logout-color);
+    border-color: var(--nav-logout-color);
+}
+
+.nav-button--logout:hover {
+    color: var(--nav-logout-hover);
+    border-color: var(--nav-logout-hover);
 }

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Create a new InventoryTracker+ account." />
+    <title>Register | InventoryTracker+</title>
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+</head>
+
+<body>
+    <%- include("partials/header.ejs") %>
+
+        <main class="auth-wrapper">
+            <div class="auth-card">
+
+                <!-- Logo / Brand -->
+                <div class="auth-brand">
+                    <span class="auth-brand-icon">📦</span>
+                    <h2>Create Account</h2>
+                    <p>Join InventoryTracker+ and get started today</p>
+                </div>
+
+                <!-- Register Form -->
+                <form class="auth-form" id="registerForm" novalidate>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="registerFirstName">First Name *</label>
+                            <input type="text" id="registerFirstName" name="firstName" placeholder="Jane"
+                                autocomplete="given-name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="registerLastName">Last Name *</label>
+                            <input type="text" id="registerLastName" name="lastName" placeholder="Doe"
+                                autocomplete="family-name" required />
+                        </div>
+                    </div>
+
+                        <div class="form-group">
+                            <label for="registerBusinessName">Business Name *</label>
+                            <input type="text" id="registerBusinessName" name="businessName" placeholder="Jane's Hardware"
+                                autocomplete="given-name" required />
+                        </div>
+
+                    <div class="form-group">
+                        <label for="registerEmail">Email Address *</label>
+                        <input type="email" id="registerEmail" name="email" placeholder="you@example.com"
+                            autocomplete="email" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword">Password *</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="registerPassword" name="password" placeholder="Min. 8 characters"
+                                autocomplete="new-password" required />
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"
+                                data-target="registerPassword">
+                                👁
+                            </button>
+                        </div>
+                        <div class="password-strength" id="strengthBar">
+                            <div class="strength-track">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <span class="strength-label" id="strengthLabel"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerConfirm">Confirm Password *</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="registerConfirm" name="confirmPassword" placeholder="••••••••"
+                                autocomplete="new-password" required />
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"
+                                data-target="registerConfirm">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="registerMessage" class="form-message" role="alert"></div>
+
+                    <button type="submit" class="btn-auth" id="registerBtn">Create Account</button>
+
+                    <p class="auth-switch">
+                        Already have an account? <a href="/login">Log in</a>
+                    </p>
+                </form>
+
+            </div>
+        </main>
+
+        <%- include("partials/footer.ejs") %>
+
+            <script src="/js/auth.js" defer></script>
+</body>
+
+</html>

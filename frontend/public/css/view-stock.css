@@ -1,9 +1,17 @@
+:root {
+    /* ── View Stock – Page Variables ────────────────────
+       Global palette is defined in site.css (:root).
+       ────────────────────────────────────────────────── */
+    --vs-border: #cccccc;
+}
+
 .container {
     display: flex;
     justify-content: center;
 }
+
 .add-item {
-    border: 1px solid #ccc;
+    border: 1px solid var(--vs-border);
     position: sticky;
     top: 50%;
     left: 0;
