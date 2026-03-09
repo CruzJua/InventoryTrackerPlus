@@ -124,9 +124,10 @@ app.post("/update-stock-quantity/:id", requireAuth, async (req, res) => {
   }
 });
 app.post("/create-stock", requireAuth, upload.single("image"), async (req, res) => {
+  console.log("req.body: ", req.body);
   try {
     const imageUrl = req.file ? req.file.path : null;
-
+    //TODO: FIND OUT HOW TO WORK WITH THE DYNAMIC FIELDS ADDED IN FRONT END.
     const stockResponse = await fetch(`${API_URL}createStock`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

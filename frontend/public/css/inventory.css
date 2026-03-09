@@ -1,0 +1,78 @@
+/* Inventory page styles (view-stock / inventory.ejs) matching contact-us.css aesthetic */
+
+.inventory-wrapper {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.inventory-header h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--main-color);
+    margin: 0;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.inventory-item {
+    background: #38343a;
+    border: 1px solid var(--main-accent);
+    border-radius: 7px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.inventory-item h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: var(--main-color);
+    margin: 0;
+}
+
+.inventory-item p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #ccc;
+    margin: 0;
+}
+
+.inventory-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.inventory-actions a,
+.inventory-actions button {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background: var(--main-color);
+    color: var(--main-bg);
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.inventory-actions a:hover,
+.inventory-actions button:hover {
+    background: #ddd;
+    transform: translateY(-1px);
+}
