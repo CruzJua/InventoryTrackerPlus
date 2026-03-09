@@ -104,10 +104,11 @@ app.post("/update-stock-quantity/:id", async (req, res) => {
   }
 });
 app.post("/create-stock", upload.single("image"), async (req, res) => {
+  console.log("req.body: ", req.body);
   try {
     // If a file was uploaded, req.file.path is the Cloudinary URL (set by multer-storage-cloudinary)
     const imageUrl = req.file ? req.file.path : null;
-
+    //TODO: FIND OUT HOW TO WORK WITH THE DYNAMIC FIELDS ADDED IN FRONT END.
     const stockResponse = await fetch(`${API_URL}createStock`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

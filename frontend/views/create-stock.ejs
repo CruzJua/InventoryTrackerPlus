@@ -20,10 +20,50 @@
                     <textarea id="description" name="description" rows="3" cols="22" required></textarea>
                     <label for="image">Image:</label>
                     <input type="file" id="image" name="image" accept="image/*">
+
+                    <!-- area for user to add custom fields dynamically -->
+                    <fieldset id="extra-fields" style="margin-top:1em;">
+                        <legend>Additional Fields (optional)</legend>
+                        <!-- rows will be appended here -->
+                    </fieldset>
+                    <button type="button" id="add-field">Add field</button>
+                    <br><br>
                     <button type="submit">Create Stock</button>
                 </form>
             </section>
         </section>
         <%-include("partials/footer.ejs")%>
+
+        <script>
+            // add a new pair of inputs for custom field name/value
+            document.getElementById('add-field').addEventListener('click', function() {
+                const container = document.getElementById('extra-fields');
+                const index = container.children.length; // just for unique ids
+
+                const labelName = document.createElement('label');
+                labelName.textContent = 'Field name:';
+                labelName.htmlFor = 'extra_name_' + index;
+                const inputName = document.createElement('input');
+                inputName.type = 'text';
+                inputName.name = 'extra_name_' + index;
+                inputName.id = 'extra_name_' + index;
+
+                const labelValue = document.createElement('label');
+                labelValue.textContent = 'Value:';
+                labelValue.htmlFor = 'extra_value_' + index;
+                const inputValue = document.createElement('input');
+                inputValue.type = 'text';
+                inputValue.name = 'extra_value_' + index;
+                inputValue.id = 'extra_value_' + index;
+
+                const br = document.createElement('br');
+
+                container.appendChild(labelName);
+                container.appendChild(inputName);
+                container.appendChild(labelValue);
+                container.appendChild(inputValue);
+                container.appendChild(br);
+            });
+        </script>
     </body>
 </html>
