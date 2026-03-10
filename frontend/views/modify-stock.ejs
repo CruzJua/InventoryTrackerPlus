@@ -17,11 +17,9 @@
             </h2>
 
             <%# Stock image preview %>
-                <% if (stock.imageUrl) { %>
-                    <div class="image-preview">
-                        <img src="<%= stock.imageUrl %>" alt="Image of <%= stock.stock_name %>">
-                    </div>
-                    <% } %>
+                <div class="image-preview">
+                    <img src="<%= stock.imageUrl || '/images/placeholder.svg' %>" alt="Image of <%= stock.stock_name %>" onerror="this.onerror=null; this.src='/images/placeholder.svg';">
+                </div>
 
                         <form class="modify-form" action="/update-stock/<%= stock._id %>" method="POST"
                             enctype="multipart/form-data">
