@@ -1,7 +1,32 @@
 /* Inventory page styles (view-stock / inventory.ejs) matching contact-us.css aesthetic */
+:root {
+    /* ── View Stock – Page Variables ────────────────────
+       Global palette is defined in site.css (:root).
+       ────────────────────────────────────────────────── */
+    --vs-border: #cccccc;
+}
+
+.seperator {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.add-item {
+    border: 1px solid var(--vs-border);
+    position: sticky;
+    top: 50%;
+    left: 0;
+    margin: 10px 10px 10px 25px;
+    width: 200px;
+    flex-shrink: 0;
+    margin: 10px 0 10px 25px;
+    padding: 12px;
+    max-height: fit-content;
+    align-self: start;
+}
 
 .inventory-wrapper {
-    max-width: 960px;
+    max-width: 80%;
     margin: 2rem auto;
     padding: 0 1.5rem;
 }
@@ -23,8 +48,9 @@
 
 .inventory-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+    flex: 1;
 }
 
 .inventory-item {

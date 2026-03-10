@@ -49,6 +49,15 @@ img {
     max-height: 20rem;
 }
 
+a {
+    color: LinkText;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: LinkText;
+}
+
 .stock-item {
     display: flex;
     flex-direction: column;
