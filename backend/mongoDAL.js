@@ -103,6 +103,20 @@ let dal = {
             await client.close()
         }
     },
+    updateStock: async function (dbName, _id, fields) {
+        log("DAL - UPDATING STOCK IN: " + dbName);
+        const client = new MongoClient(uri);
+        try {
+            await client.connect();
+            let coll = client.db(dbName).collection("Inventory");
+            await coll.updateOne({ _id: new ObjectId(_id) }, { $set: fields });
+            let result = await coll.findOne({ _id: new ObjectId(_id) });
+            log(result);
+            return result;
+        } finally {
+            await client.close();
+        }
+    },
     deleteStock: async function (dbName, _id) {
         log("DELETING STOCK WITH ID: " + _id);
         const client = new MongoClient(uri);

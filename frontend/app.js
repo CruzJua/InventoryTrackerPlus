@@ -1,5 +1,3 @@
-console.log("Front-end app.js online");
-
 const express = require("express");
 const path = require("path");
 const debugLogger = require("../logger");
@@ -97,7 +95,7 @@ app.get("/delete-stock/:id", requireAuth, async (req, res) => {
 });
 
 app.post("/update-stock-quantity/:id", requireAuth, async (req, res) => {
-  //console.log(req);
+  //log(req);
   const requestBody = {
     _id: req.params.id,
     quantity: req.body.quantity,
@@ -123,22 +121,59 @@ app.post("/update-stock-quantity/:id", requireAuth, async (req, res) => {
     res.status(500).send("Error updating stock data");
   }
 });
-app.post("/create-stock", requireAuth, upload.single("image"), async (req, res) => {
-  console.log("req.body: ", req.body);
+app.post("/update-stock/:id", requireAuth, upload.single("image"), async (req, res) => {
+  const stockId = req.params.id;
   try {
-    const imageUrl = req.file ? req.file.path : null;
+    let imageUrl = req.body.imageUrl || null;
+    let imagePublicId = req.body.imagePublicId || null;
+    if (req.file) {
+
+      if (imagePublicId) {
+        await fetch(`${API_URL}deleteImage`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ publicId: imagePublicId }),
+        });
+      }
+
+      imageUrl = req.file.path;
+      imagePublicId = req.file.filename;
+    }
+
+    const requestBody = {
+      ...req.body,
+      dbName: req.session.dbName,
+      imageUrl,
+      imagePublicId,
+    };
+
+    delete requestBody.image;
+    const apiRes = await fetch(`${API_URL}updateStock/${stockId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
+    const data = await apiRes.json();
+    log("Update stock response: ", data);
+    res.redirect("/modify-stock/" + stockId);
+  } catch (err) {
+    console.error("Error updating stock:", err);
+    res.status(500).send("Error updating stock data");
+  }
+});
+app.post("/create-stock", requireAuth, upload.single("image"), async (req, res) => {
+  log("req.body: ", req.body);
+  let bodyContent = req.body;
+  bodyContent.dbName = req.session.dbName
+  try {
+    bodyContent.imageUrl = req.file ? req.file.path : null
+    bodyContent.imagePublicId = req.file ? req.file.filename : null
+
     //TODO: FIND OUT HOW TO WORK WITH THE DYNAMIC FIELDS ADDED IN FRONT END.
     const stockResponse = await fetch(`${API_URL}createStock`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        dbName: req.session.dbName,
-        stock_name: req.body.stock_name,
-        quantity: req.body.quantity,
-        min_to_restock: req.body.min_to_restock,
-        description: req.body.description,
-        imageUrl: imageUrl,
-      }),
+      body: JSON.stringify(bodyContent),
     });
 
     const stockData = await stockResponse.json();

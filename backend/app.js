@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 
 
-const { upload } = require("./utils/cloudinary");
+const { upload, deleteImage } = require("./utils/cloudinary");
 const { dal } = require("./mongoDAL");
 const debugLogger = require("../logger");
 
@@ -159,6 +159,27 @@ app.delete("/deleteUsage/:id", (req, res) => {
  *       200:
  *         description: A single stock doc
  */
+/**
+ * @openapi
+ * /deleteImage:
+ *   delete:
+ *     summary: Delete an image from Cloudinary by publicId
+ *     responses:
+ *       200:
+ *         description: Deletion result
+ */
+app.delete("/deleteImage", async (req, res) => {
+  const { publicId } = req.body;
+  if (!publicId) return res.status(400).json({ error: "publicId is required" });
+  try {
+    const result = await deleteImage(publicId);
+    res.json({ code: 200, body: result });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Failed to delete image" });
+  }
+});
+
 app.delete("/deleteStock/:id", async (req, res) => {
   console.log("(API) ID TO DELETE: " + req.params.id);
   const dbName = req.query.dbName;
@@ -200,13 +221,8 @@ app.post("/createStock", async (req, res) => {
     try {
         const dbName = req.body.dbName;
         if (!dbName) return res.status(400).json({ error: "dbName is required" });
-        const newStock = {
-            stock_name: req.body.stock_name,
-            quantity: req.body.quantity,
-            min_to_restock: req.body.min_to_restock,
-            description: req.body.description,
-            imageUrl: req.body.imageUrl || null,
-        };
+        let newStock = req.body;
+        delete newStock.dbName;
         const dalResponse = await dal.createStock(dbName, newStock);
         res.json({ code: 200, body: dalResponse });
     }
@@ -271,6 +287,34 @@ app.post("/updateQuantity/:id", async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Failed to update quantity" });
+  }
+});
+
+/**
+ * @openapi
+ * /updateStock/:id:
+ *   post:
+ *     summary: Update any fields of a stock doc by ID
+ *     responses:
+ *       200:
+ *         description: The updated stock doc
+ */
+app.post("/updateStock/:id", async (req, res) => {
+  log("(API) UPDATING STOCK ID: " + req.params.id);
+  const dbName = req.body.dbName;
+  if (!dbName) return res.status(400).json({ error: "dbName is required" });
+  const _id = req.params.id;
+  // Pull all editable fields from body; ignore internal keys
+  const { dbName: _db, _id: _bodyId, ...fields } = req.body;
+  // Convert numeric strings for known numeric fields
+  if (fields.quantity    !== undefined) fields.quantity    = Number(fields.quantity);
+  if (fields.min_to_restock !== undefined) fields.min_to_restock = Number(fields.min_to_restock);
+  try {
+    const dalResponse = await dal.updateStock(dbName, _id, fields);
+    res.json({ code: 200, body: dalResponse });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Failed to update stock" });
   }
 });
 

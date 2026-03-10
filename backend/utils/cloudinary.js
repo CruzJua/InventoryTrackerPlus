@@ -18,4 +18,9 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-module.exports = { cloudinary, upload };
+async function deleteImage(publicId) {
+    if (!publicId) return null;
+    return cloudinary.uploader.destroy(publicId);
+}
+
+module.exports = { cloudinary, upload, deleteImage };
