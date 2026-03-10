@@ -64,7 +64,13 @@ Inventory Tracker+ is a lightweight, responsive web application designed for bus
    npm start
    ```
 
-5. **Access the Application:**
+5. **Run the Automated Tests:**
+   This project uses `jest` and `supertest` for unit testing the API routes. To run the test suite:
+   ```bash
+   npm test
+   ```
+
+6. **Access the Application:**
    Open your browser and navigate to `http://localhost:3050` (or whichever port you specified in `.env`).
 
 ## Final Project Notes
