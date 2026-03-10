@@ -1,0 +1,12 @@
+.field-container {
+    padding: 1rem 0 0.5rem 0;
+}
+
+.field-container label:nth-of-type(2) {
+  margin-left: 0.75rem;
+}
+
+
+.extra-fields {
+    margin-top:1em;
+}
