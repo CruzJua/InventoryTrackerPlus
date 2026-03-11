@@ -32,7 +32,7 @@ Inventory Tracker+ is a lightweight, responsive web application designed for bus
 
 2. **Install dependencies:**
    ```bash
-   npm install
+   npm run install-all
    ```
 
 3. **Set up Environment Variables:**
